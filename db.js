@@ -13,7 +13,7 @@ function bamazonDB() {
 
 	});
 
-	this.initDB = function() {
+	this.initDB = function(callback) {
 
 		connection.connect(function(err, res){
 
@@ -24,7 +24,7 @@ function bamazonDB() {
 			}
 
 			console.log("Connecting to DB system...");
-			//callback();
+			callback();
 
 		})
 
@@ -63,7 +63,7 @@ function bamazonDB() {
 		//connectDB();
 
 		connection.query(
-		    "select stock_quantity from products where item_id=?",
+		    "select stock_quantity, price from products where item_id=?",
 		    [idNumber],
 		    function(err, res){
 
@@ -73,7 +73,7 @@ function bamazonDB() {
 
 		    	}
 
-		    	console.log(res[0]);
+		    	//console.log(res);
 
 		    	if (res[0].stock_quantity < quantity) {
 
@@ -95,7 +95,9 @@ function bamazonDB() {
 		    		//callback(updatedQuantity);
 		    		//});
 		    		//connection.end();
-		    		callback(updatedQuantity);
+		    		var arr = [updatedQuantity, res[0].price];
+
+		    		callback(arr);
 
 		    	}
 
@@ -130,6 +132,72 @@ function bamazonDB() {
 
 	}
 
+	this.updateQuantity = function(idNumber, quantity, callback){
+
+		//console.log("in add item");
+
+		connection.query(
+		    "update products set stock_quantity=stock_quantity+? where item_id=?",
+		    [quantity, idNumber],
+		    function(err, res){
+
+		    	if (err) {
+
+		    		return console.log(err);
+
+		    	}
+
+				console.log("Added " + quantity + " more of " + "item " + idNumber + " to Inventory!");
+
+				callback();
+
+		    });
+
+
+	}
+
+	this.lowInventory = function(stock, callback) {
+
+		connection.query(
+		    "select * from products where stock_quantity<=?",
+		    [stock],
+		    function(err, res){
+
+		    	if (err) {
+
+		    		return console.log(err);
+
+		    	}
+
+		    	//console.log(res);
+				callback(res);
+
+		    });
+
+
+	}
+
+	this.addItem = function(name, department, price, quantity, callback){
+
+		connection.query("insert into products set product_name=?, department_name=?, price=?, stock_quantity=?",
+		                 [name, department, price, quantity],
+		                 function(err, res){
+
+		                 	if(err) {
+
+		                 		console.log(err);
+
+		                 	}
+
+		                 	console.log("added new item");
+
+		                 	callback();
+
+		                 });
+
+
+	}
+
 	this.shutdown = function() {
 
 		connection.end();
@@ -139,6 +207,12 @@ function bamazonDB() {
 }
 
 //var db = new bamazonDB();
+
+//db.addItem("guitar", "music", 199.99, 3);
+
+//db.addItem(1, 5);
+
+//db.lowInventory(5);
 
 //db.checkQuantity(1,2,function(res){
 

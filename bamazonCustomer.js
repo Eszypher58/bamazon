@@ -3,7 +3,7 @@ var db = require("./db.js");
 
 var myDB = new db();
 
-myDB.initDB();
+myDB.initDB(startSystem);
 
 function startSystem() {
 
@@ -62,8 +62,14 @@ function purchasePrompt(){
 				
 			} else {
 
-				myDB.removeItem(purchaseId, res, function(){
+				var itemsLeft = res[0];
+				var price = res[1];
 
+				//console.log(itemsLeft, price);
+
+				myDB.removeItem(purchaseId, itemsLeft, function(){
+
+				console.log("your Total is: " + purchaseQuantity*price);
 				console.log("Thank you for your purchase!");
 				setTimeout(function() {purchaseAgain()}, 500);
 
@@ -109,7 +115,7 @@ function purchaseAgain() {
 
 }
 
-startSystem();
+//startSystem();
 //var response;
 
 
