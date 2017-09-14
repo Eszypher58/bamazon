@@ -198,6 +198,28 @@ function bamazonDB() {
 
 	}
 
+	this.updateSales = function(idNumber, sales){
+
+		connection.query(
+		    "update products set product_sales=product_sales+? where item_id=?",
+		    [sales, idNumber],
+		    function(err, res){
+
+		    	if (err) {
+
+		    		return console.log(err);
+
+		    	}
+
+		    	console.log("added sales to DB");
+		    	//console.log(res);
+				//callback(res);
+
+		    });
+
+
+	}
+
 	this.shutdown = function() {
 
 		connection.end();

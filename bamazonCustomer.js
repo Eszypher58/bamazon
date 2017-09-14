@@ -1,9 +1,30 @@
 var inquirer = require("inquirer");
 var db = require("./db.js");
+var table = require("table");
 
 var myDB = new db();
 
 myDB.initDB(startSystem);
+
+function output(arr) {
+
+	var itemArray = [['ID', 'Product', 'Price', 'Quantity']];
+
+	for (var i = 0; i < arr.length; i++) {
+
+		var item = arr[i];
+		var tempArray = [item.item_id, 
+						 item.product_name, 
+						 item.price, 
+						 item.stock_quantity];	
+		itemArray.push(tempArray);
+
+	};
+
+	var view = table.table(itemArray);
+	console.log(view);
+
+}
 
 function startSystem() {
 
@@ -11,13 +32,7 @@ function startSystem() {
 
 		console.log("\n"+"Here are the items for purchase:");
 
-		for (var i = 0; i < res.length; i++) {
-
-			var item = res[i];
-
-			console.log("id:"+item.item_id, item.product_name, "$"+item.price, item.stock_quantity );
-
-		};
+		output(res);
 
 		console.log("--------------------------");
 
@@ -57,7 +72,7 @@ function purchasePrompt(){
 
 			if (res === false) {
 
-				console.log("insufficent quantity in stock!");
+				console.log("Insufficent quantity in stock!");
 				setTimeout(function() {purchaseAgain()}, 500);
 				
 			} else {
@@ -69,7 +84,10 @@ function purchasePrompt(){
 
 				myDB.removeItem(purchaseId, itemsLeft, function(){
 
-				console.log("your Total is: " + purchaseQuantity*price);
+				var total = purchaseQuantity*(price*100)/100;
+				console.log("Your Total is: " + total);
+				//update sales here
+				myDB.updateSales(purchaseId, total);
 				console.log("Thank you for your purchase!");
 				setTimeout(function() {purchaseAgain()}, 500);
 

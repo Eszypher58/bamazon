@@ -1,19 +1,27 @@
 var inquirer = require("inquirer");
 var db = require("./db.js");
-
+var table = require("table");
 var myDB = new db();
 
 myDB.initDB(initManagerSystem);
 
 function output(arr) {
 
+	var itemArray = [['ID', 'Product', 'Price', 'Quantity']];
+
 	for (var i = 0; i < arr.length; i++) {
 
 		var item = arr[i];
-
-		console.log("id:"+item.item_id, "name:"+item.product_name, "price:$"+item.price, "stock:"+item.stock_quantity );
+		var tempArray = [item.item_id, 
+						 item.product_name, 
+						 item.price, 
+						 item.stock_quantity];	
+		itemArray.push(tempArray);
 
 	};
+
+	var view = table.table(itemArray);
+	console.log(view);
 
 }
 
