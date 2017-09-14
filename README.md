@@ -8,4 +8,4 @@ To enter customer view, type "node bamazonCustomer.js".
 
 The screenshot below shows the presented screen after entering **Customer** view.
 
-![Alt text](/picture/img.png?raw=true "ss01")
+![Alt text](/picture/ss01.png?raw=true "ss01")
