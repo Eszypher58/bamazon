@@ -31,10 +31,15 @@ User can exit the system by choosing no when prompted to purchase again.
 To enter Manager view, type "node bamazonManager.js".
 
 There will be four selections:
+
 ..*View Products for Sale
+
 ..*View Low Inventory
+
 ..*Add to Inventory
+
 ..*Add New Product
+
 ..*QUIT
 
 **View Products for Sale** will list out all the products durrently in invetory database.
